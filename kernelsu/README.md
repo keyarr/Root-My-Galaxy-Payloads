@@ -16,6 +16,8 @@ between KMIs.
 | `ksud-A366WVLS3AYG1-kdp` | Same exact A36 build | `android15-6.6` | Device-tested late-load binary embedding the exact A36 no-patch-text module |
 | `android14-6.1_kernelsu-e3q-S928USQS6DZF2-kdp.ko` | `SM-S928U/SM-S928U1`, `S928USQS6DZF2` | `android14-6.1` | Exact E3Q module with target `vermagic`, audited for manual relocation |
 | `ksud-e3q-S928USQS6DZF2-kdp` | Same exact E3Q build | `android14-6.1` | Late-load binary embedding the E3Q module |
+| `android14-6.1_kernelsu-e3q-S928BXXU5DZDP-kdp.ko` | `SM-S928B`, `S928BXXU5DZDP` | `android14-6.1` | Exact E3Q module with exact `S928BXXU5DZDP` `vermagic`, audited for manual relocation |
+| `ksud-e3q-S928BXXU5DZDP-kdp` | Same exact E3Q build | `android14-6.1` | Late-load binary embedding the S928B E3Q module |
 | `android14-6.1_kernelsu-e2s-S926BXXUEDZDR-kdp.ko` | `SM-S926B`, `S926BXXUEDZDR` | `android14-6.1` | Exact E2S no-patch-text module with target `vermagic`, audited for manual relocation |
 | `ksud-e2s-S926BXXUEDZDR-kdp` | Same exact E2S build | `android14-6.1` | Device-tested late-load binary embedding the E2S no-patch-text module |
 | `android14-6.1_kernelsu-e1s-S921NKSSFDZF3-kdp.ko` | `SM-S921N`, `S921NKSSFDZF3` | `android14-6.1` | Exact S921N no-patch-text module with target `vermagic`, audited for manual relocation |
@@ -31,9 +33,11 @@ The standalone `.ko` files are retained for auditing. Root My Galaxy downloads
 the corresponding `ksud-*` file because `ksud late-load` loads its embedded
 `<kmi>_kernelsu.ko` asset.
 
-The generic 6.1 files and E3Q pair are build-verified but device-untested. The
-E3Q pair is tied to the full S928U DZF2 release string and must not be replaced
-with the generic 6.1 pair. The E2S pair is tied to the S926B DZDR release,
+The generic 6.1 files and both E3Q pairs are build-verified but
+device-untested. The E3Q DZF2 pair is tied to the full S928U DZF2 release
+string and must not be replaced with the generic 6.1 pair. The E3Q DZDP pair
+is tied to the full S928BXXU5DZDP release string and must not be replaced
+with the generic 6.1 pair or the DZF2 pair. The E2S pair is tied to the S926B DZDR release,
 static-audited, and device-tested: late-load reports version code `32525`, and
 the loader runs in `u:r:ksu:s0`. The E1S pair is tied to the S921B DZE1 release,
 static-audited against the recovered DZE1 `vmlinux` (202 undefined symbols, zero
@@ -203,9 +207,25 @@ python3 kernelsu/tools/audit_module_against_target.py \
 ```
 
 This must report zero symbols missing from the target symbol table, zero
-module version entries, and zero CRC mismatches. The E3Q audit has 209
+module version entries, and zero CRC mismatches. The E3Q DZF2 audit has 209
 undefined imports, all present in the target ELF; 50 are intentionally
 resolved through kallsyms rather than conventional exports.
+
+The E3Q DZDP module is built for the same exact-vermagic contract with the
+full `S928BXXU5DZDP` release. Its manual-relocation audit reports 209
+undefined imports, zero missing target symbols, an empty `__versions`
+section, zero target CRC mismatches, and 73 imports resolved through
+kallsyms rather than conventional exports. Published DZDP artifacts:
+
+```text
+android14-6.1_kernelsu-e3q-S928BXXU5DZDP-kdp.ko
+size: 400152
+SHA-256: 81ba5ba5175522437f978f79d0c5a5446d0c0054a96c446d18101bd7e3058b6d
+
+ksud-e3q-S928BXXU5DZDP-kdp
+size: 3799648
+SHA-256: 148bf4f53fedc45cd955ecab51147242e62bee90f5ee49b0866bfa77e31577c0
+```
 
 The E2S module uses the same upstream Samsung no-patch-text source as the A56
 build, but is rebuilt for the exact 6.1 target release. Its manual-relocation
