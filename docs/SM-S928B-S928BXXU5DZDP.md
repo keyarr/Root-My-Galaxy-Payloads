@@ -129,7 +129,7 @@ Image[0x023762f0] = 0xffffffc00a6046e8   (== kernel addr of sysctl_bootid)
 
 ## KernelSU late-load artifacts
 
-Status: **COMPLETE for static build; hardware test pending**
+Status: **COMPLETE — hardware-tested**
 
 - KernelSU tag `v3.2.5` commit `b0bc817b4e966aa6aa830834eaf6ef765d821d40`
   plus the Samsung KDP/RKP/DEFEX patch.
@@ -181,8 +181,11 @@ builds:
 All offline gates verified (firmware hashes, identical BTF, handoff
 constants, 256-qword fingerprint regenerated from S928B, reproducible
 104,128-byte release, exact-vermagic late-load module, clean import audit).
-**No hardware execution has been attempted**: slide-accurate runtime offsets
-and the p0 allocation path need on-device validation. Target state:
-`experimental` until a device report is filed.
+Hardware validation is also complete: the exact S928B build loaded the payload
+and KernelSU module, entered `u:r:ksu:s0`, and remained stable without a reboot.
+KernelSU Manager reported `Working <LKM> [Jailbreak mode]`, version `32525-2`,
+and one superuser; Root Checker reported root access installed. Root remains
+per-boot because no boot image was modified, and reboot survival is still
+untested. Target state: `device-tested` for the tested DZDP build.
 
 See also `docs/PORTING.md` and `src/targets/e3q-S928BXXU5DZDP/README.md`.

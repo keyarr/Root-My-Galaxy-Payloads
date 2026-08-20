@@ -17,7 +17,7 @@ between KMIs.
 | `android14-6.1_kernelsu-e3q-S928USQS6DZF2-kdp.ko` | `SM-S928U/SM-S928U1`, `S928USQS6DZF2` | `android14-6.1` | Exact E3Q module with target `vermagic`, audited for manual relocation |
 | `ksud-e3q-S928USQS6DZF2-kdp` | Same exact E3Q build | `android14-6.1` | Late-load binary embedding the E3Q module |
 | `android14-6.1_kernelsu-e3q-S928BXXU5DZDP-kdp.ko` | `SM-S928B`, `S928BXXU5DZDP` | `android14-6.1` | Exact E3Q module with exact `S928BXXU5DZDP` `vermagic`, audited for manual relocation |
-| `ksud-e3q-S928BXXU5DZDP-kdp` | Same exact E3Q build | `android14-6.1` | Late-load binary embedding the S928B E3Q module |
+| `ksud-e3q-S928BXXU5DZDP-kdp` | Same exact E3Q build | `android14-6.1` | Device-tested late-load binary embedding the S928B module; loaded on hardware and remained stable |
 | `android14-6.1_kernelsu-e2s-S926BXXUEDZDR-kdp.ko` | `SM-S926B`, `S926BXXUEDZDR` | `android14-6.1` | Exact E2S no-patch-text module with target `vermagic`, audited for manual relocation |
 | `ksud-e2s-S926BXXUEDZDR-kdp` | Same exact E2S build | `android14-6.1` | Device-tested late-load binary embedding the E2S no-patch-text module |
 | `android14-6.1_kernelsu-e1s-S921NKSSFDZF3-kdp.ko` | `SM-S921N`, `S921NKSSFDZF3` | `android14-6.1` | Exact S921N no-patch-text module with target `vermagic`, audited for manual relocation |
@@ -33,11 +33,15 @@ The standalone `.ko` files are retained for auditing. Root My Galaxy downloads
 the corresponding `ksud-*` file because `ksud late-load` loads its embedded
 `<kmi>_kernelsu.ko` asset.
 
-The generic 6.1 files and both E3Q pairs are build-verified but
-device-untested. The E3Q DZF2 pair is tied to the full S928U DZF2 release
-string and must not be replaced with the generic 6.1 pair. The E3Q DZDP pair
-is tied to the full S928BXXU5DZDP release string and must not be replaced
-with the generic 6.1 pair or the DZF2 pair. The E2S pair is tied to the S926B DZDR release,
+The generic 6.1 files remain build-verified only. The S928U DZF2 pair is tied to
+the full S928U DZF2 release string and must not be replaced with the generic
+6.1 pair. The S928B DZDP pair is tied to the full `S928BXXU5DZDP` release,
+uses the no-patch-text Samsung path, is statically audited, and is hardware-tested:
+the exact `ksud` loaded `kernelsu.ko`, entered `u:r:ksu:s0`, and remained stable
+without a reboot. KernelSU Manager reported `Working <LKM> [Jailbreak mode]`,
+version `32525-2`, and one superuser; Root Checker reported root access installed.
+Root remains per-boot because no boot image was modified. Reboot survival is
+untested. The E2S pair is tied to the S926B DZDR release,
 static-audited, and device-tested: late-load reports version code `32525`, and
 the loader runs in `u:r:ksu:s0`. The E1S pair is tied to the S921B DZE1 release,
 static-audited against the recovered DZE1 `vmlinux` (202 undefined symbols, zero
